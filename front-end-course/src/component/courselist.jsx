@@ -11,12 +11,27 @@ import { useState } from 'react'
 
 
 function DisplayList() {
-   
-  let [searchterm, setsearchterm] = useState("");
+
+  const [value, setvalue] = useState("");
+  const [datasource, setdatasource] = useState(data)
+  const [tablefilter, settablefilter] = useState([])
+
+  const filterdata = (e) => {
+    if (e.target.value != "") {
+      setvalue(e.target.value);
+      const filterTable = datasource.filter(o => Object.key(o).some(k =>
+        String(o[k]).toLowerCase().includes(e.target.value.toLowerCase())))
+      settablefilter([...filterTable])
+    } else {
+      setvalue(e.target.value);
+      setdatasource([...datasource])
+    }
+  }
+
   let coursedata = useNavigate()
 
   const handleEdit = (id, name, description, instructor, instrument, dayofWeek, student, price) => {
-    localStorage.setItem('Name',name);
+    localStorage.setItem('Name', name);
     localStorage.setItem('Description', description)
     localStorage.setItem('Instructor', instructor)
     localStorage.setItem('Instrument', instrument)
@@ -56,10 +71,9 @@ function DisplayList() {
           <h1 className='heading'>Courses</h1>
           <div className='heading2'>
             <p className='p1'>COURSELIST</p>
-            <input className="search" type="text" placeholder="Search.." name="search" onChange={(e)=>{
-              setsearchterm(e.target.value)}
-              }/>
+            <input className="search" type="text" value={value} placeholder="Search.." name="search" onChange={filterdata} />
             <img className="searchicon" src={search} alt='search' />
+
           </div>
 
           <div>
@@ -100,11 +114,11 @@ function DisplayList() {
                                 <td className="whitespace-nowrap px-6 py-4">{item.Price}</td>
                                 <td className="whitespace-nowrap px-6 py-4">
                                   <Link to={"/edit"}>
-                                  <Button onClick={() => handleEdit(item.id, item.Name, item.Description,
-                                    item.Instructor, item.Instrument, item.DayofWeek, item.Student, item.Price)}>Edit</Button> 
-                                   </Link>
+                                    <Button onClick={() => handleEdit(item.id, item.Name, item.Description,
+                                      item.Instructor, item.Instrument, item.DayofWeek, item.Student, item.Price)}>Edit</Button>
+                                  </Link>
                                   <Link onClick={() => handleDelete(item.id)}>Delete</Link>
-                                  
+
                                 </td>
 
                               </tr>
@@ -114,21 +128,42 @@ function DisplayList() {
                         :
                         'No Data found'
                     }
+                    {
+                      value.length > 0 ?
+                        tablefilter.map((data) => {
+                          return (
+                            <>
+                              <td>{data.Name}</td>
+                              <td>{data.Price}</td>
+                            </>
+                          )
+                        })
+                        :
+                        datasource.map((data) => {
+                          return (
+                            <>
+                                 <td>{data.Name}</td>
+                                 <td>{data.Price}</td>
+                              
+                            </>
+                    )
+                    })
+                    }
 
-                  </tbody>
-                </table>
-              </div>
+                </tbody>
+              </table>
             </div>
-
-
-
           </div>
-          <Link to="/add" className="addcourse">
-            + Add course
-          </Link>
-        </div>
 
+
+
+        </div>
+        <Link to="/add" className="addcourse">
+          + Add course
+        </Link>
       </div>
+
+    </div >
 
 
     </>
