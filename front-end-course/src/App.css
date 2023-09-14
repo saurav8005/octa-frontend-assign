@@ -87,3 +87,8 @@
   width: 100%;
   opacity: 0.9;
 }
+
+.secondcontainer {
+    width: 800px;
+    margin-left: 100px;
+}

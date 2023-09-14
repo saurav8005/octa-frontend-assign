@@ -1,5 +1,5 @@
 import { useRef } from "react"
-
+import { Link } from "react-router-dom"
 
 const Login = () => {
     const loginRef = useRef({username:"", password:""})
@@ -32,12 +32,9 @@ const Login = () => {
                                 <button type="submit" onClick={()=>{console.log(loginRef)}}  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full submit">Login</button>
 
                                 <p className="mb-0 mt-2 pt-1 text-sm font-semibold">Don't have an account?{" "}
-                                    <a
-                                        href=""
-                                        className="text-danger transition duration-150 ease-in-out hover:text-danger-600 focus:text-danger-600 active:text-danger-700"
-                                    >
-                                        Register
-                                    </a>
+                                    
+                                    <Link to="/registration"    className="text-danger transition duration-150 ease-in-out hover:text-danger-600 focus:text-danger-600 active:text-danger-700" >Sign Up</Link>
+                                    
                                 </p>
 
                             </form>
