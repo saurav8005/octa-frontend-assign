@@ -12,21 +12,8 @@ import { useState } from 'react'
 
 function DisplayList() {
 
-  const [value, setvalue] = useState("");
-  const [datasource, setdatasource] = useState(data)
-  const [tablefilter, settablefilter] = useState([])
-
-  const filterdata = (e) => {
-    if (e.target.value != "") {
-      setvalue(e.target.value);
-      const filterTable = datasource.filter(o => Object.key(o).some(k =>
-        String(o[k]).toLowerCase().includes(e.target.value.toLowerCase())))
-      settablefilter([...filterTable])
-    } else {
-      setvalue(e.target.value);
-      setdatasource([...datasource])
-    }
-  }
+  const [searchitem, setSearch] = useState("")
+  //console.log(searchitem)
 
   let coursedata = useNavigate()
 
@@ -71,7 +58,9 @@ function DisplayList() {
           <h1 className='heading'>Courses</h1>
           <div className='heading2'>
             <p className='p1'>COURSELIST</p>
-            <input className="search" type="text" value={value} placeholder="Search.." name="search" onChange={filterdata} />
+            <input className="search" type="text" onChange={(e)=>{
+                setSearch(e.target.value)
+            }}  placeholder="Search.." name="search"  />
             <img className="searchicon" src={search} alt='search' />
 
           </div>
@@ -99,10 +88,14 @@ function DisplayList() {
                   <tbody>
                     {
                       data && data.length > 0 ?
-                        data.map((item) => {
+                        data.filter((item)=>{
+                          return searchitem.toLowerCase() === ''
+                          ? item
+                          : item.Name.toLowerCase().includes(searchitem);
+                        }).map((item) => {
                           return (
                             <>
-                              <tr className="border-b dark:border-neutral-500">
+                              <tr className="border-b dark:border-neutral-500" key={item.id}>
                                 <td className="whitespace-nowrap px-6 py-4 font-medium">
                                   {item.Name}
                                 </td>
@@ -128,28 +121,7 @@ function DisplayList() {
                         :
                         'No Data found'
                     }
-                    {
-                      value.length > 0 ?
-                        tablefilter.map((data) => {
-                          return (
-                            <>
-                              <td>{data.Name}</td>
-                              <td>{data.Price}</td>
-                            </>
-                          )
-                        })
-                        :
-                        datasource.map((data) => {
-                          return (
-                            <>
-                                 <td>{data.Name}</td>
-                                 <td>{data.Price}</td>
-                              
-                            </>
-                    )
-                    })
-                    }
-
+                    
                 </tbody>
               </table>
             </div>
